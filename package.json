@@ -1,5 +1,5 @@
 {
-  "name": "create-vue",
+  "name": "@shoko/create-vue",
   "version": "3.1.9",
   "description": "An easy way to start a Vue project",
   "type": "module",
