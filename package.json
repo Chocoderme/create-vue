@@ -1,5 +1,5 @@
 {
-  "name": "@shoko/create-vue",
+  "name": "create-vue-shoko",
   "version": "3.1.10",
   "description": "An easy way to start a Vue project",
   "type": "module",
