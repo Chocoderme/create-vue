@@ -1,3 +1,3 @@
 [submodule "playground"]
 	path = playground
-	url = git@github.com:Chocoderme/create-vue-templates.git
+	url = https://github.com/Chocoderme/create-vue-templates.git
