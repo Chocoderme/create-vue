@@ -61,6 +61,7 @@ async function init() {
   // --auto-import
   // --svg-loader
   // --sass
+  // --element-plus
   // --force (for force overwriting)
   const argv = minimist(process.argv.slice(2), {
     alias: {
@@ -86,7 +87,8 @@ async function init() {
       argv.eslint ??
       argv['auto-import'] ??
       argv['svg-loader'] ??
-      argv.sass
+      argv.sass ??
+      argv['element-plus']
     ) === 'boolean'
 
   let targetDir = argv._[0]
@@ -109,6 +111,7 @@ async function init() {
     needsUnplugin?: boolean
     needsSvgLoader?: boolean
     needsSass?: boolean
+    needsElementPlus?: boolean
   } = {}
 
   try {
@@ -253,6 +256,14 @@ async function init() {
           initial: false,
           active: 'Yes',
           inactive: 'No'
+        },
+        {
+          name: 'needsElementPlus',
+          type: () => (isFeatureFlagsUsed ? null : 'toggle'),
+          message: 'Add Element Plus?',
+          initial: false,
+          active: 'Yes',
+          inactive: 'No'
         }
       ],
       {
@@ -282,7 +293,8 @@ async function init() {
     needsPrettier = argv['eslint-with-prettier'],
     needsUnplugin = argv['auto-import'],
     needsSvgLoader = argv['svg-loader'],
-    needsSass = argv.sass
+    needsSass = argv.sass,
+    needsElementPlus = argv['element-plus']
   } = result
   const needsCypressCT = needsCypress && !needsVitest
   const root = path.join(cwd, targetDir)
@@ -341,6 +353,9 @@ async function init() {
     if (needsVitest) {
       render('tsconfig/vitest')
     }
+    if (needsElementPlus) {
+      render('tsconfig/element-plus')
+    }
   }
 
   // Render ESLint config
@@ -367,6 +382,22 @@ async function init() {
     render('config/sass')
   }
 
+  // Render Element Plus
+  if (needsElementPlus) {
+    render('config/element-plus')
+
+    if (needsSass) {
+      render('config/element-plus-sass')
+    }
+
+    if (needsUnplugin) {
+      const renderFolder = `config/element-plus-unplugin${needsSass ? '-sass' : ''}${
+        needsSvgLoader ? '-svg-loader' : ''
+      }`
+      render(renderFolder)
+    }
+  }
+
   // Render code template.
   // prettier-ignore
   const codeTemplate =
@@ -375,15 +406,15 @@ async function init() {
   render(`code/${codeTemplate}`)
 
   // Render entry file (main.js/ts).
-  if (needsPinia && needsRouter) {
-    render('entry/router-and-pinia')
-  } else if (needsPinia) {
-    render('entry/pinia')
-  } else if (needsRouter) {
-    render('entry/router')
-  } else {
-    render('entry/default')
-  }
+  const dependencies = [
+    needsRouter ? 'router' : '',
+    needsPinia ? 'pinia' : '',
+    needsElementPlus && !needsUnplugin ? 'element-plus' : ''
+  ]
+    .filter((d) => d !== '')
+    .join('-and-')
+  const entryPath = dependencies ? `entry/${dependencies}` : 'entry/default'
+  render(entryPath)
 
   // Cleanup.
 
