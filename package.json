@@ -1,6 +1,6 @@
 {
   "name": "create-vue-extended",
-  "version": "3.1.13",
+  "version": "3.1.14",
   "description": "An easy way to start a Vue project",
   "type": "module",
   "bin": {
