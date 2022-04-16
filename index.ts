@@ -59,6 +59,8 @@ async function init() {
   // --eslint
   // --eslint-with-prettier (only support prettier through eslint for simplicity)
   // --auto-import
+  // --svg-loader
+  // --sass
   // --force (for force overwriting)
   const argv = minimist(process.argv.slice(2), {
     alias: {
@@ -82,7 +84,9 @@ async function init() {
       argv.vitest ??
       argv.cypress ??
       argv.eslint ??
-      argv['auto-import']
+      argv['auto-import'] ??
+      argv['svg-loader'] ??
+      argv.sass
     ) === 'boolean'
 
   let targetDir = argv._[0]
@@ -103,6 +107,8 @@ async function init() {
     needsEslint?: boolean
     needsPrettier?: boolean
     needsUnplugin?: boolean
+    needsSvgLoader?: boolean
+    needsSass?: boolean
   } = {}
 
   try {
@@ -231,6 +237,22 @@ async function init() {
           initial: false,
           active: 'Yes',
           inactive: 'No'
+        },
+        {
+          name: 'needsSvgLoader',
+          type: () => (isFeatureFlagsUsed ? null : 'toggle'),
+          message: 'Add Vite SVG Loader?',
+          initial: false,
+          active: 'Yes',
+          inactive: 'No'
+        },
+        {
+          name: 'needsSass',
+          type: () => (isFeatureFlagsUsed ? null : 'toggle'),
+          message: 'Add SASS pre-processor?',
+          initial: false,
+          active: 'Yes',
+          inactive: 'No'
         }
       ],
       {
@@ -258,7 +280,9 @@ async function init() {
     needsVitest = argv.vitest || argv.tests,
     needsEslint = argv.eslint || argv['eslint-with-prettier'],
     needsPrettier = argv['eslint-with-prettier'],
-    needsUnplugin = argv['auto-import']
+    needsUnplugin = argv['auto-import'],
+    needsSvgLoader = argv['svg-loader'],
+    needsSass = argv.sass
   } = result
   const needsCypressCT = needsCypress && !needsVitest
   const root = path.join(cwd, targetDir)
@@ -327,6 +351,20 @@ async function init() {
   // Render unplugin auto import
   if (needsUnplugin) {
     render('config/unplugin')
+  }
+
+  // Render vite Svg loader
+  if (needsSvgLoader) {
+    render('config/svg-loader')
+
+    if (needsUnplugin) {
+      render('config/svg-loader-unplugin')
+    }
+  }
+
+  // Render Sass preprocessor
+  if (needsSass) {
+    render('config/sass')
   }
 
   // Render code template.
