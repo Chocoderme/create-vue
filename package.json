@@ -1,7 +1,7 @@
 {
   "name": "create-vue-extended",
-  "version": "3.1.14",
-  "description": "An easy way to start a Vue project",
+  "version": "3.1.15",
+  "description": "An easy way to start a Vue project (unofficial)",
   "type": "module",
   "bin": {
     "create-vue": "outfile.cjs"
@@ -24,15 +24,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vuejs/create-vue.git"
+    "url": "git+https://github.com/Chocoderme/create-vue-extended.git"
   },
   "keywords": [],
-  "author": "Haoqun Jiang <haoqunjiang+npm@gmail.com>",
+  "author": "Elliott Zwertvaegher <elliott.zz59@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vuejs/create-vue/issues"
+    "url": "https://github.com/Chocoderme/create-vue-extended/issues"
   },
-  "homepage": "https://github.com/vuejs/create-vue#readme",
+  "homepage": "https://github.com/Chocoderme/create-vue-extended#readme",
   "devDependencies": {
     "@types/eslint": "^8.4.1",
     "@types/prompts": "^2.0.14",

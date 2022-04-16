@@ -1,19 +1,18 @@
-# create-vue
+# create-vue-extended
 
-[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/vuejs/create-vue)
+Fork of [create-vue](https://github.com/vuejs/create-vue)
 
 An easy way to start a Vue project
+
+Additional options :
+
+- Sass
+- Element Plus
+- Vite SVG Loader
+- Unplugin Auto Import
 
 ## Usage
 
 ```sh
-npm init vue@3
+npm init vue-extended@latest
 ```
-
-Or, if you need to support IE11, you can create a Vue 2 project with:
-
-```sh
-npm init vue@2
-```
-
-Note that the version number (`@3` or `@2`) MUST NOT be omitted, otherwise `npm` may resolve to a cached and outdated version of the package.
