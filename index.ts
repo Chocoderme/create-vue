@@ -58,6 +58,7 @@ async function init() {
   // --cypress
   // --eslint
   // --eslint-with-prettier (only support prettier through eslint for simplicity)
+  // --auto-import
   // --force (for force overwriting)
   const argv = minimist(process.argv.slice(2), {
     alias: {
@@ -80,7 +81,8 @@ async function init() {
       argv.tests ??
       argv.vitest ??
       argv.cypress ??
-      argv.eslint
+      argv.eslint ??
+      argv['auto-import']
     ) === 'boolean'
 
   let targetDir = argv._[0]
@@ -100,6 +102,7 @@ async function init() {
     needsCypress?: boolean
     needsEslint?: boolean
     needsPrettier?: boolean
+    needsUnplugin?: boolean
   } = {}
 
   try {
@@ -220,6 +223,14 @@ async function init() {
           initial: false,
           active: 'Yes',
           inactive: 'No'
+        },
+        {
+          name: 'needsUnplugin',
+          type: () => (isFeatureFlagsUsed ? null : 'toggle'),
+          message: 'Add Components AutoImport?',
+          initial: false,
+          active: 'Yes',
+          inactive: 'No'
         }
       ],
       {
@@ -246,7 +257,8 @@ async function init() {
     needsCypress = argv.cypress || argv.tests,
     needsVitest = argv.vitest || argv.tests,
     needsEslint = argv.eslint || argv['eslint-with-prettier'],
-    needsPrettier = argv['eslint-with-prettier']
+    needsPrettier = argv['eslint-with-prettier'],
+    needsUnplugin = argv['auto-import']
   } = result
   const needsCypressCT = needsCypress && !needsVitest
   const root = path.join(cwd, targetDir)
@@ -310,6 +322,11 @@ async function init() {
   // Render ESLint config
   if (needsEslint) {
     renderEslint(root, { needsTypeScript, needsCypress, needsCypressCT, needsPrettier })
+  }
+
+  // Render unplugin auto import
+  if (needsUnplugin) {
+    render('config/unplugin')
   }
 
   // Render code template.
